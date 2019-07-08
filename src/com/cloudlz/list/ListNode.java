@@ -5,10 +5,8 @@ public class ListNode {
     ListNode next;
     public ListNode() {
         val = 0;
-        next = null;
     }
     public ListNode(int x) {
         val = x;
-        next = null;
     }
 }

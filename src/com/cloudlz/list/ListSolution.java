@@ -1,8 +1,6 @@
 package com.cloudlz.list;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class ListSolution {
     /**
@@ -295,6 +293,65 @@ public class ListSolution {
      * @return
      */
     public int numComponents(ListNode head, int[] G) {
-        
+        int maxLen = 0;
+        Set<Integer> g = new HashSet<Integer>();
+        for (int i = 0; i < G.length; i++) {
+            g.add(G[i]);
+        }
+        while (head != null) {
+            if (g.contains(head.val)) {
+                head = head.next;
+                if (head == null || !g.contains(head.val)) {
+                    maxLen++;
+                }
+            } else {
+                head = head.next;
+            }
+        }
+        return maxLen;
+    }
+
+    /**
+     * 1019. 链表中的下一个更大节点
+     * 给定一个带有头结点 head 的非空单链表，返回链表的中间结点。
+     *
+     * 如果有两个中间结点，则返回第二个中间结点。
+     * @param head
+     * @return
+     */
+    public int[] nextLargerNodes(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        if (head.next == null) {
+            return new int[1];
+        }
+        int pos = 0;
+        List<Integer> resList = new ArrayList<Integer>();
+        //栈里压的元素第一位是节点值，第二位是节点位置
+        Stack<Pair> tmp = new Stack<Pair>();
+        while (head != null) {
+           resList.add(0);
+           while (!tmp.empty() && head.val > tmp.peek().first) {
+               resList.set(tmp.peek().second, head.val);
+               tmp.pop();
+           }
+           tmp.push(new Pair(head.val, pos++));
+           head = head.next;
+        }
+        int[] res = new int[resList.size()];
+        for (int i = 0; i < resList.size(); i++) {
+            res[i] = resList.get(i);
+        }
+        return res;
+    }
+    class Pair {
+        int first;
+        int second;
+        Pair(int first, int second) {
+            this.first = first;
+            this.second = second;
+        }
     }
 }
+
