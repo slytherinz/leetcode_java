@@ -1,10 +1,7 @@
 package com.cloudlz.tree;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TreeSolution {
 
@@ -1026,10 +1023,366 @@ public class TreeSolution {
 
     /**
      * 538. 把二叉搜索树转换为累加树
+     * 给定一个二叉搜索树（Binary Search Tree），把它转换成为累加树（Greater Tree)，使得每个节点的值是原来的节点值加上所有大于它的节点值之和。
      * @param root
      * @return
      */
     public TreeNode convertBST(TreeNode root) {
+        //右中左是从大到小
+        rightToLeft(root, 0);
+        return root;
+    }
+    private int rightToLeft(TreeNode root, int sum) {
+        if (root == null) {
+            return sum;
+        }
+        root.val += rightToLeft(root.right, sum);
+        return rightToLeft(root.left, root.val);
+    }
 
+    /**
+     * 543. 二叉树的直径
+     * 一棵二叉树的直径长度是任意两个结点路径长度中的最大值。这条路径可能穿过根结点。
+     * @param root
+     * @return
+     */
+    int diameter = 0;
+    public int diameterOfBinaryTree(TreeNode root) {
+        computePath(root);
+        return diameter;
+    }
+    private int computePath(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int leftPath =  computePath(root.left);
+        int rightPath = computePath(root.right);
+        if (leftPath + rightPath  > diameter) {
+            diameter = leftPath + rightPath;
+        }
+        return leftPath > rightPath ? leftPath + 1 : rightPath + 1;
+    }
+
+    /**
+     * 563. 二叉树的坡度
+     * 一个树的节点的坡度定义即为，该节点左子树的结点之和和右子树结点之和的差的绝对值。空结点的的坡度是0。
+     * 整个树的坡度就是其所有节点的坡度之和。
+     * @param root
+     * @return
+     */
+    int tiltAll = 0;
+    public int findTilt(TreeNode root) {
+        leftRightSum(root);
+        return tiltAll;
+    }
+    private int leftRightSum(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int leftSum = leftRightSum(root.left);
+        int rightSum = leftRightSum(root.right);
+        tiltAll += Math.abs(leftSum-rightSum);
+        return leftSum + rightSum + root.val;
+    }
+
+    /**
+     * 572. 另一个树的子树
+     * @param s
+     * @param t
+     * @return
+     */
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        if (s == null) {
+            return false;
+        }
+        if (isSameTree(s, t)) {
+            return true;
+        }
+        return isSubtree(s.left, t) || isSubtree(s.right, t);
+    }
+
+    /**
+     * 617. 合并二叉树
+     * @param t1
+     * @param t2
+     * @return
+     */
+
+    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+        if (t1 == null) {
+            return t2;
+        }
+        if (t2 == null) {
+            return t1;
+        }
+        TreeNode mTree = new TreeNode(t1.val + t2.val);
+        mTree.left = mergeTrees(t1.left, t2.left);
+        mTree.right = mergeTrees(t1.right, t2.right);
+        return mTree;
+    }
+
+    /**
+     * 623. 在二叉树中增加一行
+     * @param root
+     * @param v
+     * @param d
+     * @return
+     */
+    public TreeNode addOneRow(TreeNode root, int v, int d) {
+        if (root == null) {
+            return root;
+        }
+        //在根节点之前的情况，单独处理
+        if (d == 1) {
+            TreeNode addNode1 = new TreeNode(v);
+            addNode1.left = root;
+            return addNode1;
+        }
+        int curD = 1;
+        List<TreeNode> preList = new ArrayList<TreeNode>();
+        preList.add(root);
+        List<TreeNode> nextList = new ArrayList<TreeNode>();
+        for (TreeNode preL : preList) {
+            if (preL != null) {
+                nextList.add(preL.left);
+                nextList.add(preL.right);
+            }
+        }
+        while (curD < d-1) {
+            preList = nextList;
+            nextList = new ArrayList<TreeNode>();
+            for (TreeNode preL : preList) {
+                if (preL != null) {
+                    nextList.add(preL.left);
+                    nextList.add(preL.right);
+                }
+            }
+            curD++;
+        }
+        int j=0;
+        for (int i=0;i < preList.size(); i++) {
+            if (preList.get(i) != null) {
+                TreeNode addNode1 = new TreeNode(v);
+                TreeNode addNode2 = new TreeNode(v);
+                preList.get(i).left = addNode1;
+                preList.get(i).right = addNode2;
+                if (nextList != null) {
+                    addNode1.left = nextList.get(2 * j);
+                    addNode2.right = nextList.get(2 * j + 1);
+                }
+                j++;
+            }
+        }
+        return root;
+    }
+
+    /**
+     * 637. 二叉树的层平均值
+     * 给定一个非空二叉树, 返回一个由每层节点平均值组成的数组.
+     * @param root
+     * @return
+     */
+    public List<Double> averageOfLevels(TreeNode root) {
+        //层序遍历
+        List<Double> res = new ArrayList<Double>();
+        if (root == null) {
+            return res;
+        }
+        List<TreeNode> curLevel = new ArrayList<TreeNode>();
+        curLevel.add(root);
+        while (curLevel.size() != 0) {
+            double levelSum = 0;
+            List<TreeNode> nextLevel = new ArrayList<TreeNode>();
+            for (TreeNode node : curLevel) {
+                levelSum += node.val;
+                if (node.left != null) {
+                    nextLevel.add(node.left);
+                }
+                if (node.right != null) {
+                    nextLevel.add(node.right);
+                }
+            }
+            res.add(levelSum/curLevel.size());
+            curLevel = nextLevel;
+        }
+        return res;
+    }
+
+    /**
+     * 652. 寻找重复的子树
+     * @param root
+     * @return
+     */
+    List<TreeNode> dplcList = new ArrayList<TreeNode>();
+    Map<String, Integer> sTreeStrs = new HashMap();
+    public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+        if (root == null) {
+            return dplcList;
+        }
+        //遍历子树，组成字符串，并放到map里，重复的子树串一样
+        buildSubTreeStr(root);
+        return dplcList;
+    }
+    private String buildSubTreeStr(TreeNode node) {
+        if (node == null) {
+            return "#";
+        }
+        String val = node.val + buildSubTreeStr(node.left) + buildSubTreeStr(node.right);
+        if(sTreeStrs.get(val)==null){
+            sTreeStrs.put(val, 1);
+        }else if(sTreeStrs.get(val)==1){
+            dplcList.add(node);
+            sTreeStrs.put(val, 2);
+        }
+        return val;
+    }
+
+    /**
+     * 653. 两数之和 IV - 输入 BST
+     * @param root
+     * @param k
+     * @return
+     */
+    public boolean findTarget(TreeNode root, int k) {
+        //中序遍历，递增序列，双指针找
+       return false;
+    }
+
+    /**
+     * 654. 最大二叉树
+     * @param nums
+     * @return
+     */
+    public TreeNode constructMaximumBinaryTree(int[] nums) {
+        return maximumBinaryTree(nums, 0, nums.length-1);
+    }
+    private TreeNode maximumBinaryTree(int[] nums, int start, int end) {
+        if (start > end) {
+            return null;
+        }
+        int maxVal=nums[start];
+        int pos = start;
+        for (int i=start;i<=end;i++) {
+            if (nums[i] > maxVal) {
+                maxVal = nums[i];
+                pos = i;
+            }
+        }
+        TreeNode node = new TreeNode(maxVal);
+        node.left = maximumBinaryTree(nums, start, pos-1);
+        node.right = maximumBinaryTree(nums, pos+1, end);
+        return node;
+    }
+
+    /**
+     * 655. 输出二叉树
+     * @param root
+     * @return
+     */
+    public List<List<String>> printTree(TreeNode root) {
+        //层序遍历
+        return null;
+    }
+
+    /**
+     * 662. 二叉树最大宽度
+     * @param root
+     * @return
+     */
+    int maxWidth = 0;
+    public int widthOfBinaryTree(TreeNode root) {
+        //层序遍历，求每一层的宽度
+        List<TreeNode> curLevel = new ArrayList<TreeNode>();
+        curLevel.add(root);
+        //当前层不为空
+        while (!isAllNull(curLevel)) {
+            int width = 0;
+            //两个非空节点的距离
+            if (curLevel.size() == 1) {
+                width = 1;
+            } else {
+                //
+                int i = 0;
+                int j = curLevel.size()-1;
+                while (i<j) {
+                    if (curLevel.get(i) != null && curLevel.get(j) != null) {
+                        break;
+                    }
+                    if (curLevel.get(i) == null) {
+                        i++;
+                    }
+                    if (curLevel.get(j) == null) {
+                        j--;
+                    }
+                }
+                width = j-i+1;
+            }
+            if (width > maxWidth) {
+                maxWidth = width;
+            }
+            List<TreeNode> nextLevel = new ArrayList<TreeNode>();
+            for (TreeNode node : curLevel) {
+                if (node == null) {
+                    nextLevel.add(null);
+                    nextLevel.add(null);
+                } else {
+                    nextLevel.add(node.left);
+                    nextLevel.add(node.right);
+                }
+            }
+            curLevel = nextLevel;
+        }
+        return maxWidth;
+    }
+    private boolean isAllNull(List<TreeNode> nodes) {
+        boolean isNull = true;
+        for (TreeNode node : nodes) {
+            if (node != null) {
+                isNull = false;
+                break;
+            }
+        }
+        return isNull;
+    }
+
+    /**
+     * 669. 修剪二叉搜索树
+     * @param root
+     * @param L
+     * @param R
+     * @return
+     */
+    public TreeNode trimBST(TreeNode root, int L, int R) {
+        if (root == null) {
+            return root;
+        }
+        if (root.val < L) {
+            return trimBST(root.right, L, R);
+        } else if (root.val > R) {
+            return trimBST(root.left, L, R);
+        }
+        root.left = trimBST(root.left, L, R);
+        root.right = trimBST(root.right, L, R);
+        return root;
+    }
+
+    /**
+     * 671. 二叉树中第二小的节点
+     * @param root
+     * @return
+     */
+    public int findSecondMinimumValue(TreeNode root) {
+        //遍历，排序
+        return 0;
+    }
+
+    /**
+     * 687. 最长同值路径
+     * 给定一个二叉树，找到最长的路径，这个路径中的每个节点具有相同值。 这条路径可以经过也可以不经过根节点。
+     * @param root
+     * @return
+     */
+    public int longestUnivaluePath(TreeNode root) {
+        
     }
 }
