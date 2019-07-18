@@ -580,7 +580,7 @@ public class TreeSolution {
      * @return
      */
     public int maxPathSum(TreeNode root) {
-
+        return 0;
     }
 
     /**
@@ -1382,7 +1382,208 @@ public class TreeSolution {
      * @param root
      * @return
      */
+    int longestPath = 0;
     public int longestUnivaluePath(TreeNode root) {
-        
+        univaluePath(root);
+        return longestPath;
+    }
+    //子树中最长的路径
+    private int univaluePath(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int path = 0;
+        int left = univaluePath(root.left);
+        int right = univaluePath(root.right);
+        int leftAll = 0;
+        int rightAll = 0;
+        if (root.left != null && root.val == root.left.val) {
+            leftAll += left + 1;
+        }
+        if (root.right != null && root.val == root.right.val) {
+            rightAll += right + 1;
+        }
+        path = leftAll + rightAll;
+        if (path > longestPath) {
+            longestPath = path;
+        }
+        return leftAll>rightAll?leftAll:rightAll;
+    }
+
+    /**
+     * 700. 二叉搜索树中的搜索
+     * @param root
+     * @param val
+     * @return
+     */
+    public TreeNode searchBST(TreeNode root, int val) {
+        //递归，如果小于root的值往左子树，大于root的值往右子树
+        if (root == null) {
+            return root;
+        }
+        if (val == root.val) {
+            return root;
+        } else if (val < root.val) {
+            return searchBST(root.left, val);
+        } else {
+            return searchBST(root.right, val);
+        }
+    }
+
+    /**
+     * 701. 二叉搜索树中的插入操作
+     * @param root
+     * @param val
+     * @return
+     */
+    public TreeNode insertIntoBST(TreeNode root, int val) {
+        if (root == null) {
+            return new TreeNode(val);
+        }
+        if (val > root.val) {
+            root.right = insertIntoBST(root.right, val);
+        } else {
+            root.left = insertIntoBST(root.left, val);
+        }
+        return root;
+    }
+
+    /**
+     * 783. 二叉搜索树结点最小距离
+     * @param root
+     * @return
+     */
+    public int minDiffInBST(TreeNode root) {
+        //中序遍历
+        return 0;
+    }
+
+    /**
+     * 814. 二叉树剪枝
+     * 给定二叉树根结点 root ，此外树的每个结点的值要么是 0，要么是 1。
+     *
+     * 返回移除了所有不包含 1 的子树的原二叉树。
+     * @param root
+     * @return
+     */
+    public TreeNode pruneTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        //注意先递归，后处理根节点
+        root.left = pruneTree(root.left);
+        root.right = pruneTree(root.right);
+        if (root.val == 0 && root.left == null && root.right == null) {
+            return null;
+        }
+        return root;
+    }
+
+    /**
+     * 863. 二叉树中所有距离为 K 的结点
+     * 返回到目标结点 target 距离为 K 的所有结点的值的列表。
+     * @param root
+     * @param target
+     * @param K
+     * @return
+     */
+
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
+        //二叉树转图
+        return null;
+    }
+
+    /**
+     * 865. 具有所有最深结点的最小子树
+     * 返回能满足“以该结点为根的子树中包含所有最深的结点”这一条件的具有最大深度的结点。
+     * @param root
+     * @return
+     */
+    public TreeNode subtreeWithAllDeepest(TreeNode root) {
+        //如果左子树高度==右子树高度，这个节点就是结果
+        if (root == null) {
+            return null;
+        }
+        int leftDepth = maxDepthOptimize(root.left);
+        int rightDepth = maxDepthOptimize(root.right);
+        if (leftDepth == rightDepth) {
+            return root;
+        }
+        if (leftDepth > rightDepth) {
+            return subtreeWithAllDeepest(root.left);
+        } else {
+            return subtreeWithAllDeepest(root.right);
+        }
+    }
+    //求深度的最优写法
+    private int maxDepthOptimize(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return Math.max(maxDepthOptimize(root.left), maxDepthOptimize(root.right)) + 1;
+    }
+
+    /**
+     * 872. 叶子相似的树
+     * @param root1
+     * @param root2
+     * @return
+     */
+    public boolean leafSimilar(TreeNode root1, TreeNode root2) {
+        //叶子节点的序列
+        List<Integer> leaf1 = new ArrayList<Integer>();
+        leafNode(root1, leaf1);
+        List<Integer> leaf2 = new ArrayList<Integer>();
+        leafNode(root2, leaf2);
+        if (leaf1.size() != leaf2.size()) {
+            return false;
+        }
+        for (int i=0;i<leaf1.size();i++) {
+            if (leaf1.get(i) != leaf2.get(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private void leafNode(TreeNode root, List<Integer> leafs) {
+        if (root == null) {
+            return;
+        }
+        if (root.left == null && root.right == null) {
+            leafs.add(root.val);
+        }
+        leafNode(root.left, leafs);
+        leafNode(root.right, leafs);
+    }
+
+    /**
+     * 938. 二叉搜索树的范围和
+     * 给定二叉搜索树的根结点 root，返回 L 和 R（含）之间的所有结点的值的和。
+     * @param root
+     * @param L
+     * @param R
+     * @return
+     */
+    public int rangeSumBST(TreeNode root, int L, int R) {
+        if (root == null) {
+            return 0;
+        }
+        if (root.val < L) {
+            return rangeSumBST(root.right, L, R);
+        }
+        if (root.val > R) {
+            return rangeSumBST(root.left, L, R);
+        }
+        return root.val + rangeSumBST(root.left, L, R) + rangeSumBST(root.right, L, R);
+    }
+
+    /**
+     * 951. 翻转等价二叉树
+     * @param root1
+     * @param root2
+     * @return
+     */
+    public boolean flipEquiv(TreeNode root1, TreeNode root2) {
+
     }
 }
