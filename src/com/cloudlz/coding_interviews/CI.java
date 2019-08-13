@@ -477,13 +477,69 @@ public class CI {
     }
 
     /**
-     * 连续子数组的最大和
-     * @param array
+     * 整数中1出现的次数
+     * @param n
      * @return
      */
-    public int FindGreatestSumOfSubArray(int[] array) {
+    public int NumberOf1Between1AndN_Solution(int n) {
+        int count = 0;
+        int i = 1;
+        //遍历每个数
+        while (i<=n) {
+            //每一位是不是为1
+            int tmp = i;
+            while (tmp != 0) {
+                if (tmp%10 == 1) {
+                    count++;
+                }
+                tmp = tmp/10;
+            }
+            i++;
+        }
+        return count;
+    }
+
+    /**
+     * 把数组排成最小的数
+     * @param numbers
+     * @return
+     */
+    public String PrintMinNumber(int [] numbers) {
+        if(numbers.length==0||numbers==null)
+            return "";
+        Integer[] nums = new Integer[numbers.length];
+        int k = 0;
+        for (int val : numbers) {
+            nums[k++] = Integer.valueOf(val);
+        }
+        Arrays.sort(nums,new Comparator<Integer>() {
+            //对数组numbers用自定义方法排序
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                //重写compare方法来比较o1,o2的大小，当o1+""+o2和o2+""+o1
+                //都是字符串，比较o1,o2的大小其实是比较两个子串的大小
+                return (o1+""+o2).compareTo(o2+""+o1);
+            }
+
+        });
+        String ss=new String();
+        for(int i=0;i<nums.length;i++)
+        {
+            ss+=nums[i];
+        }
+        return ss;
+    }
+
+    /**
+     * 丑数
+     * @param index
+     * @return
+     */
+    public int GetUglyNumber_Solution(int index) {
+        
         return 0;
     }
+
 
     public static void main (String[] args) {
         System.out.println("192.168.0.0:111的哈希值：" + "192.168.0.0:1111".hashCode());
