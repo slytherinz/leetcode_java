@@ -390,9 +390,100 @@ public class CI {
      * @return
      */
     public ArrayList<String> Permutation(String str) {
-        return null;
+        //全排列，递归
+        //求所有可能出现在第一个位置的字符；将第一个字符和后面的字符依次交换
+        //固定第一个字符，对第一个字符后面的所有字符求全排列。第一个字符后面的所有字符又可以分为两部分
+        ArrayList<String> res = new ArrayList<>();
+        if (str == null || str.length() == 0) {
+            return res;
+        }
+        char[] charArray = str.toCharArray();
+        TreeSet<String> treeSet = new TreeSet();
+        permutationCore(charArray, treeSet, 0);
+        res.addAll(treeSet);
+        return res;
     }
 
+    private void permutationCore(char[] array, TreeSet<String> treeSet, int pos) {
+        if (pos > array.length-1) {
+            return;
+        }
+        if (pos == array.length-1) {
+            treeSet.add(String.valueOf(array));
+        }
+        for (int i=pos;i<array.length;i++) {
+            swap(array, i, pos);
+            permutationCore(array, treeSet, pos+1);
+            swap(array, i, pos);
+        }
+    }
+    private void swap(char[] charArray,int i,int j) {
+        char temp = charArray[i];
+        charArray[i] = charArray[j];
+        charArray[j] = temp;
+    }
+
+    /**
+     * 数组中出现次数超过一半的数字
+     * @param array
+     * @return
+     */
+    public int MoreThanHalfNum_Solution(int [] array) {
+        //排序，中位数肯定是这个数
+        Arrays.sort(array);
+        int half = array.length/2;
+        int count = 0;
+        for(int i=0; i<array.length; i++){
+            if(array[i] == array[half])
+                count ++;
+        }
+        if(count > half){
+            return array[half];
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * 最小的K个数
+     * @param input
+     * @param k
+     * @return
+     */
+    public ArrayList<Integer> GetLeastNumbers_Solution(int [] input, int k) {
+        ArrayList<Integer> res = new ArrayList<>();
+        if (input.length == 0 || k == 0 || k > input.length) {
+            return res;
+        }
+        //大顶堆
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<Integer>(k, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2-o1;
+            }
+        });
+        for (int i=0;i<input.length;i++) {
+            if (maxHeap.size() != k) {
+                maxHeap.add(input[i]);
+            } else if (maxHeap.peek() > input[i]) {
+                maxHeap.poll();
+                maxHeap.add(input[i]);
+            }
+        }
+        for (Integer integer : maxHeap) {
+            res.add(integer);
+        }
+        return res;
+    }
+
+    /**
+     * 连续子数组的最大和
+     * @param array
+     * @return
+     */
+    public int FindGreatestSumOfSubArray(int[] array) {
+        return 0;
+    }
 
     public static void main (String[] args) {
         System.out.println("192.168.0.0:111的哈希值：" + "192.168.0.0:1111".hashCode());
