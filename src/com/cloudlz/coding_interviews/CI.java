@@ -1,5 +1,6 @@
 package com.cloudlz.coding_interviews;
 
+import com.cloudlz.array.ArraySolution;
 import com.cloudlz.list.ListNode;
 import com.cloudlz.tree.TreeNode;
 
@@ -530,20 +531,311 @@ public class CI {
         return ss;
     }
 
+    class RepeatChar {
+        int pos;
+        int count;
+    }
     /**
-     * 丑数
-     * @param index
+     * 第一次只出现一次的字符
+     * @param str
      * @return
      */
-    public int GetUglyNumber_Solution(int index) {
-        
-        return 0;
+
+    public int FirstNotRepeatingChar(String str) {
+        HashMap<Character, RepeatChar> map = new HashMap<>();
+        for (int i=0;i<str.length();i++) {
+            Character ch = str.charAt(i);
+            RepeatChar repeatChar = map.get(ch);
+            if (repeatChar != null) {
+                repeatChar.count++;
+                map.put(ch, repeatChar);
+            } else {
+                repeatChar = new RepeatChar();
+                repeatChar.pos = i;
+                repeatChar.count = 1;
+                map.put(ch, repeatChar);
+            }
+        }
+        //entrySet输出是按key的ASCII码排序
+        int firstPos = -1;
+        for (Map.Entry<Character, RepeatChar> kv : map.entrySet()) {
+            if (kv.getValue().count == 1) {
+                if (firstPos == -1 || kv.getValue().pos < firstPos) {
+                    firstPos = kv.getValue().pos;
+                }
+            }
+        }
+        return firstPos;
     }
 
+    /**
+     * 数组中的逆序对
+     * 解题思路：归并排序是有阶段性结果的排序，有序的数组，逆序对不需要比较
+     * @param array
+     * @return
+     */
+    int pairsCount = 0;
+    public int reversePairs(int[] array) {
+        int[] tmpArr = new int[array.length];
+        divide(array, 0, array.length-1, tmpArr);
+        return pairsCount;
+    }
+    public void divide(int[] arr, int left, int right, int[] tmpArr) {
+        if (left >= right) {
+            return;
+        }
+        int mid = left + (right - left)/2;
+        divide(arr, left, mid, tmpArr);
+        divide(arr, mid+1, right, tmpArr);
+        merge(arr, left, right, mid, tmpArr);
+    }
+
+    public void merge(int[] arr, int left, int right, int mid, int[] tmpArr) {
+        int l = left;
+        int r = mid + 1;
+        int k = 0;
+        while (l <= mid && r <= right) {
+            // 右区间归并的时候，当前值比左区间所有值都小，说明逆序对的个数就是左区间剩余的个数
+            if (arr[l] > arr[r]) {
+                pairsCount += mid - l + 1;
+                tmpArr[k++] = arr[r++];
+            } else {
+                tmpArr[k++] = arr[l++];
+            }
+        }
+        while (l <= mid) {
+            tmpArr[k++] = arr[l++];
+        }
+        while (r <= left) {
+            tmpArr[k++] = arr[r++];
+        }
+        for (int i=0;i<k;i++) {
+            arr[left+i] = tmpArr[i];
+        }
+    }
+
+    /**
+     * 面试题 17.26. 稀疏相似度
+     * @param docs
+     * @return
+     */
+    public List<String> computeSimilarities(int[][] docs) {
+        // 元素交集除以并集
+        // 元素的交集可以通过map记录元素出现在哪些数组，并集可以通过两个数组的总数-交集里的总数
+        List<String> res = new ArrayList<>();
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        // 记录交集
+        int[][] nums = new int[docs.length][docs.length];
+        for (int i=0; i< docs.length; i++) {
+            for (int j=0; j<docs[i].length; j++) {
+                // list表示docs[i][j]出现的数组
+                List<Integer> list = map.get(docs[i][j]);
+                if (list == null) {
+                    list = new ArrayList<>();
+                    map.put(docs[i][j], list);
+                } else {
+                    for (Integer k : list) {
+                        nums[i][k]++;
+                    }
+                }
+                list.add(i);
+            }
+            for (int k=0; k<docs.length; k++) {
+                if (nums[i][k] > 0) {
+                    res.add(k + "," + i + ": " +
+                            String.format("%.4f", (double) nums[i][k]/(docs[i].length+docs[k].length-nums[i][k])));
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 面试题 17.23. 最大黑方阵
+     * @param matrix
+     * @return
+     */
+    public int[] findSquare(int[][] matrix) {
+        if (matrix.length == 0) {
+            return new int[0];
+        }
+        // a数组记录（i，j）向上和向左的最大值
+        int[][] leftMax = new int[matrix.length][matrix.length];
+        int[][] upMax = new int[matrix.length][matrix.length];
+        for (int i=0; i<matrix.length; i++) {
+            for (int j=0; j< matrix.length; j++) {
+                if (matrix[i][j] == 0) {
+                    if (i==0 && j==0) {
+                        leftMax[i][j] = 1;
+                        upMax[i][j] = 1;
+                    } else if (i==0 && j>0) {
+                        upMax[i][j] = 1;
+                        leftMax[i][j] = leftMax[i][j-1] + 1;
+                    } else if (i>0 && j==0) {
+                        upMax[i][j] = upMax[i-1][j] + 1;
+                        leftMax[i][j] = 1;
+                    } else {
+                        upMax[i][j] = upMax[i-1][j] + 1;
+                        leftMax[i][j] = leftMax[i][j-1] + 1;
+                    }
+                }
+            }
+        }
+        // 结果集
+        int[] res = new int[]{-1,-1,-1};
+        // 从右下角开始遍历
+        for (int i=matrix.length-1; i>=0; i--) {
+            for (int j=matrix.length-1; j>=0; j--) {
+                // 方阵的边长
+                int edge = Math.min(upMax[i][j], leftMax[i][j]);
+                while (edge > 0) {
+                    if (res[2] > edge) {
+                        break;
+                    }
+                    int x = i-edge+1;
+                    int y = j-edge+1;
+                    // 左下角的点upMax的值大于边长判断左边是否满足，右上角点的leftMax值大于边长判断上边是否满足
+                    if(upMax[i][y]>=edge && leftMax[x][j]>=edge) {
+                        if (edge > res[2]) {
+                            res[0] = x;
+                            res[1] = y;
+                            res[2] = edge;
+                        } else if (edge == res[2] && x<=res[0]) {
+                            if (x < res[0]) {
+                                res[0] = x;
+                                res[1] = y;
+                            } else if(x == res[0] && y < res[1]) {
+                                res[1] = y;
+                            }
+                        }
+                    }
+                    edge--;
+                }
+            }
+        }
+        if (res[0] !=-1) {
+            return res;
+        } else {
+            return new int[0];
+        }
+    }
+
+    /**
+     * 统计全1子矩形
+     * @param mat
+     * @return
+     */
+    public int numSubmat(int[][] mat) {
+        int count = 0;
+        // 记录一个点的向左的个数
+        int[][] leftCount = new int[mat.length][mat[0].length];
+        for (int i=0; i< mat.length; i++) {
+            for (int j=0; j< mat[0].length; j++) {
+                if (mat[i][j] == 1) {
+                    if (j==0) {
+                        leftCount[i][j] = 1;
+                    } else {
+                        leftCount[i][j] = leftCount[i][j-1] + 1;
+                    }
+                }
+            }
+        }
+
+        for (int i=0; i< mat.length; i++) {
+            for (int j=0; j< mat[0].length; j++) {
+                if (mat[i][j]==0) {
+                    continue;
+                }
+                int leftLen = mat[0].length;
+                for (int k=i; k>=0 && mat[k][j]==1; k--) {
+                    leftLen = Math.min(leftLen, leftCount[k][j]);
+                    // 向左的个数就是矩形的个数
+                    count += leftLen;
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
+     * 1505. 最多 K 次交换相邻数位后得到的最小整数
+     * @param num
+     * @param k
+     * @return
+     */
+    public String minInteger(String num, int k) {
+
+        return "";
+    }
+
+    public String pushDominoes(String dominoes) {
+        if (dominoes.length() <= 1) {
+            return dominoes;
+        }
+        StringBuilder tmp = new StringBuilder(dominoes);
+        Character startChar = dominoes.charAt(0);
+        int startPos = 0;
+        int len = 0;
+        if (startChar == '.') {
+            len = 1;
+        }
+        for (int i=1;i<dominoes.length();i++) {
+            if (dominoes.charAt(i) == 'L') {
+                if (startChar == 'R' && len > 1) {
+                    //朝中间推
+                    if (len%2 == 0) {
+                        int halflen = len/2;
+                        int j;
+                        for (j = startPos+1 ;j<=startPos+halflen;j++) {
+                            tmp.setCharAt(j, 'R');
+                        }
+                        for (j=startPos+halflen+1;j<i;j++) {
+                            tmp.setCharAt(j, 'L');
+                        }
+                    } else {
+                        int halflen = len/2;
+                        int j;
+                        for (j = startPos+1 ;j<startPos+halflen+1;j++) {
+                            tmp.setCharAt(j, 'R');
+                        }
+                        for (j=startPos+halflen+2;j<i;j++) {
+                            tmp.setCharAt(j, 'L');
+                        }
+                    }
+                } else if (startChar == 'L' || startChar == '.') { // 朝左边推
+                    for (int j=startPos;j<i;j++) {
+                        tmp.setCharAt(j, 'L');
+                    }
+                }
+                startChar = 'L';
+                startPos = i;
+                len = 0;
+            } else if (dominoes.charAt(i) == 'R') {
+                if (startChar == 'R') {
+                    for (int j=startPos;j<i;j++) {
+                        tmp.setCharAt(j, 'R');
+                    }
+                }
+                startChar = 'R';
+                startPos = i;
+                len = 0;
+            } else {
+                len++;
+            }
+        }
+        if (len != 0 && dominoes.charAt(dominoes.length()-1) == '.' && startChar == 'R') {
+            for (int i=startPos; i<dominoes.length();i++) {
+                tmp.setCharAt(i, 'R');
+            }
+        }
+        return tmp.toString();
+    }
 
     public static void main (String[] args) {
-        System.out.println("192.168.0.0:111的哈希值：" + "192.168.0.0:1111".hashCode());
-        System.out.println("192.148.0.0:111的哈希值：" + "192.148.0.0:1111".hashCode());
+        String s = "0123";
+        String ss = s.substring(0,2);
+        StringBuilder sb = new StringBuilder(s);
+        System.out.println(ss);
     }
 
 

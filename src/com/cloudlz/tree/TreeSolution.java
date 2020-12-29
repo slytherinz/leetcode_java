@@ -1604,4 +1604,42 @@ public class TreeSolution {
         }
         return (flipEquiv(root1.left, root2.left) && flipEquiv(root1.right, root2.right)) || (flipEquiv(root1.left, root2.right) && flipEquiv(root1.right, root2.left));
     }
+
+    /**
+     * 二叉树的左视图
+     * 层序遍历，放的第一个就是
+     * @return
+     */
+    public List<Integer> LeftSideView(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+        Queue<TreeNode> curLevel = new LinkedList<>();
+        curLevel.add(root);
+        res.add(root.val);
+        boolean firstNode = false;
+        Queue<TreeNode> nextLevel = new LinkedList<>();
+        while (!curLevel.isEmpty()) {
+            while (!curLevel.isEmpty()) {
+                TreeNode node = curLevel.remove();
+                if (firstNode) {
+                    res.add(node.val);
+                    firstNode = false;
+                }
+                if (node.left != null) {
+                    nextLevel.add(node.left);
+                }
+                if (node.right != null) {
+                    nextLevel.add(node.right);
+                }
+            }
+            curLevel = nextLevel;
+            firstNode = true;
+            nextLevel = new LinkedList<>();
+        }
+        return res;
+    }
+
+
 }
