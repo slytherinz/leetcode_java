@@ -13,27 +13,32 @@ public class SortSolution {
     // 再i++由前向后找比基准数大的数，找到后也挖出此数填到前一个坑a[j]中。
     // 重复进行这种“挖坑填数”直到i==j。再将基准数填入a[i]中，
     // 这样i之前的数都比基准数小，i之后的数都比基准数大。因此将数组分成二部分再分别重复上述步骤就完成了排序。
-    public void quickSort(int s[], int l, int r)
+    public void quickSort(int s[], int start, int end)
     {
         //挖坑填坑
-        if (l < r)
+        if (start < end)
         {
-            int i = l, j = r, x = s[l];//x为第一个坑
-            while (i < j)
+            int left = start, right = end, base = s[start];//x为第一个坑
+            while (left < right)
             {
-                while(i < j && s[j] >= x) // 从右向左找第一个小于x的数
-                    j--;
-                if(i < j)
-                    s[i++] = s[j];
+                while(left < right && s[right] >= base) // 从右向左找第一个小于x的数
+                    right--;
+                if(left < right) {
+                    s[left] = s[right];
+                    left++;
+                }
 
-                while(i < j && s[i] <= x) // 从左向右找第一个大于x的数
-                    i++;
-                if(i < j)
-                    s[j--] = s[i];
+                while(left < right && s[left] <= base) // 从左向右找第一个大于x的数
+                    left++;
+                if(left < right) {
+                    s[right] = s[left];
+                    right--;
+                }
+
             }
-            s[i] = x;
-            quickSort(s, l, i - 1); // 递归调用
-            quickSort(s, i + 1, r);
+            s[left] = base;
+            quickSort(s, start, left - 1); // 递归调用
+            quickSort(s, left + 1, end);
         }
     }
     //归并排序
