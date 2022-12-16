@@ -215,6 +215,7 @@ public class TreeSolution {
 
     /**
      * 102. 二叉树的层次遍历
+     *
      * @param root
      * @return
      */
@@ -228,6 +229,7 @@ public class TreeSolution {
         level(firstLevel, res);
         return res;
     }
+
     private void level(List<TreeNode> curLevel, List<List<Integer>> res) {
         boolean isNull = true;
         List<TreeNode> nextLevel = new ArrayList<TreeNode>();
@@ -249,6 +251,7 @@ public class TreeSolution {
 
     /**
      * 103. 二叉树的锯齿形层次遍历
+     *
      * @param root
      * @return
      */
@@ -262,6 +265,7 @@ public class TreeSolution {
         zigzagLevel(firstLevel, res, 1);
         return res;
     }
+
     private void zigzagLevel(List<TreeNode> curLevel, List<List<Integer>> res, int order) {
         boolean isNull = true;
         List<TreeNode> nextLevel = new ArrayList<TreeNode>();
@@ -277,29 +281,31 @@ public class TreeSolution {
         if (isNull) {
             return;
         }
-        if (order%2 == 1) {
+        if (order % 2 == 1) {
             for (int i = 0; i < curLevel.size(); i++) {
                 if (curLevel.get(i) != null) {
                     curList.add(curLevel.get(i).val);
                 }
             }
         } else {
-            for (int i = curLevel.size()-1; i >=0 ; i--) {
+            for (int i = curLevel.size() - 1; i >= 0; i--) {
                 if (curLevel.get(i) != null) {
                     curList.add(curLevel.get(i).val);
                 }
             }
         }
         res.add(curList);
-        zigzagLevel(nextLevel, res, order+1);
+        zigzagLevel(nextLevel, res, order + 1);
     }
 
     /**
      * 104. 二叉树的最大深度
+     *
      * @param root
      * @return
      */
     int maxLen = 0;
+
     public int maxDepth(TreeNode root) {
         if (root == null) {
             return 0;
@@ -325,49 +331,53 @@ public class TreeSolution {
 
     /**
      * 105. 从前序与中序遍历序列构造二叉树
+     *
      * @param preorder
      * @param inorder
      * @return
      */
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        return construnctTree(preorder, 0, preorder.length-1, inorder, 0, inorder.length-1);
+        return construnctTree(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
     }
+
     private TreeNode construnctTree(int[] preorder, int preS, int preE, int[] inorder, int inS, int inE) {
         if (preS > preE || inS > inE) {
             return null;
         }
         TreeNode node = new TreeNode(preorder[preS]);
         //前序遍历的点在中序遍历中作为根节点，将序列分为左子树和右子树
-        for (int i = inS;i<=inE;i++) {
+        for (int i = inS; i <= inE; i++) {
             if (inorder[i] == preorder[preS]) {
                 //左子树
-                node.left = construnctTree(preorder, preS+1, preS+(i-inS), inorder, inS, i-1);
+                node.left = construnctTree(preorder, preS + 1, preS + (i - inS), inorder, inS, i - 1);
                 //右子树
-                node.right = construnctTree(preorder, preS+(i-inS)+1, preE, inorder, i+1, inE);
+                node.right = construnctTree(preorder, preS + (i - inS) + 1, preE, inorder, i + 1, inE);
             }
         }
         return node;
     }
 
     /**
-     *106. 从中序与后序遍历序列构造二叉树
+     * 106. 从中序与后序遍历序列构造二叉树
+     *
      * @param inorder
      * @param postorder
      * @return
      */
     public TreeNode buildTree2(int[] inorder, int[] postorder) {
-        return construnctTree2(inorder, 0, inorder.length-1, postorder, 0, postorder.length-1);
+        return construnctTree2(inorder, 0, inorder.length - 1, postorder, 0, postorder.length - 1);
     }
+
     private TreeNode construnctTree2(int[] inorder, int inS, int inE, int[] postorder, int postS, int postE) {
         if (inS > inE || postS > postE) {
             return null;
         }
         //序列的最后一个节点是根节点
         TreeNode node = new TreeNode(postorder[postE]);
-        for (int i=inS;i<=inE;i++) {
+        for (int i = inS; i <= inE; i++) {
             if (inorder[i] == postorder[postE]) {
-                node.left = construnctTree2(inorder, inS, i-1, postorder, postS, postS+(i-inS)-1);
-                node.right = construnctTree2(inorder, i+1, inE, postorder, postS+(i-inS), postE-1);
+                node.left = construnctTree2(inorder, inS, i - 1, postorder, postS, postS + (i - inS) - 1);
+                node.right = construnctTree2(inorder, i + 1, inE, postorder, postS + (i - inS), postE - 1);
             }
         }
         return node;
@@ -376,6 +386,7 @@ public class TreeSolution {
     /**
      * 107. 二叉树的层次遍历 II
      * 给定一个二叉树，返回其节点值自底向上的层次遍历。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
+     *
      * @param root
      * @return
      */
@@ -389,26 +400,28 @@ public class TreeSolution {
     /**
      * 108. 将有序数组转换为二叉搜索树
      * 将一个按照升序排列的有序数组，转换为一棵高度平衡二叉搜索树。
+     *
      * @param nums
      * @return
      */
     public TreeNode sortedArrayToBST(int[] nums) {
-        return construtBST(nums, 0, nums.length-1);
+        return construtBST(nums, 0, nums.length - 1);
     }
 
     private TreeNode construtBST(int[] nums, int start, int end) {
         if (start > end) {
             return null;
         }
-        int mid = start + (end-start)/2;
+        int mid = start + (end - start) / 2;
         TreeNode node = new TreeNode(nums[mid]);
-        node.left = construtBST(nums, start, mid-1);
-        node.right = construtBST(nums, mid+1, end);
+        node.left = construtBST(nums, start, mid - 1);
+        node.right = construtBST(nums, mid + 1, end);
         return node;
     }
 
     /**
-     *110. 平衡二叉树
+     * 110. 平衡二叉树
+     *
      * @param root
      * @return
      */
@@ -418,7 +431,7 @@ public class TreeSolution {
         }
         int leftLen = treeLength(root.left);
         int rightLen = treeLength(root.right);
-        if (leftLen-rightLen>1 || rightLen-leftLen>1) {
+        if (leftLen - rightLen > 1 || rightLen - leftLen > 1) {
             return false;
         }
         boolean leftB = isBalanced(root.left);
@@ -443,6 +456,7 @@ public class TreeSolution {
     /**
      * 111. 二叉树的最小深度
      * 最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+     *
      * @param root
      * @return
      */
@@ -473,6 +487,7 @@ public class TreeSolution {
     /**
      * 112. 路径总和
      * 给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。
+     *
      * @param root
      * @param sum
      * @return
@@ -483,6 +498,7 @@ public class TreeSolution {
         }
         return nextPathSum(root, sum);
     }
+
     private boolean nextPathSum(TreeNode root, int sum) {
         if (root == null) {
             if (sum == 0) {
@@ -492,26 +508,27 @@ public class TreeSolution {
             }
         }
         if (root.left == null && root.right == null) {
-            if (sum-root.val == 0) {
+            if (sum - root.val == 0) {
                 return true;
             } else {
                 return false;
             }
         }
         if (root.left == null) {
-            return nextPathSum(root.right, sum-root.val);
+            return nextPathSum(root.right, sum - root.val);
         }
         if (root.right == null) {
-            return nextPathSum(root.left, sum-root.val);
+            return nextPathSum(root.left, sum - root.val);
         }
-        boolean leftHas = nextPathSum(root.left, sum-root.val);
-        boolean rightHas = nextPathSum(root.right, sum-root.val);
+        boolean leftHas = nextPathSum(root.left, sum - root.val);
+        boolean rightHas = nextPathSum(root.right, sum - root.val);
         return leftHas || rightHas;
     }
 
     /**
      * 113. 路径总和 II
      * 给定一个二叉树和一个目标和，找到所有从根节点到叶子节点路径总和等于给定目标和的路径。
+     *
      * @param root
      * @param sum
      * @return
@@ -540,7 +557,7 @@ public class TreeSolution {
         }
         ////[0,1,1] 1的情况
         if (root.left == null && root.right == null) {
-            if (sum-root.val == 0) {
+            if (sum - root.val == 0) {
                 List<Integer> path = new ArrayList<Integer>();
                 if (pathList.size() != 0) {
                     for (Integer i : pathList) {
@@ -576,6 +593,7 @@ public class TreeSolution {
 
     /**
      * 124. 二叉树中的最大路径和
+     *
      * @param root
      * @return
      */
@@ -586,10 +604,11 @@ public class TreeSolution {
     /**
      * 129. 求根到叶子节点数字之和
      * 给定一个二叉树，它的每个结点都存放一个 0-9 的数字，每条从根到叶子节点的路径都代表一个数字。
-     *
+     * <p>
      * 例如，从根到叶子节点路径 1->2->3 代表数字 123。
-     *
+     * <p>
      * 计算从根到叶子节点生成的所有数字之和。
+     *
      * @param root
      * @return
      */
@@ -602,10 +621,12 @@ public class TreeSolution {
 
     /**
      * 222. 完全二叉树的节点个数
+     *
      * @param root
      * @return
      */
     int nodesCount = 0;
+
     public int countNodes(TreeNode root) {
         if (root == null) {
             return 0;
@@ -615,6 +636,7 @@ public class TreeSolution {
         levelOrder(nextLevel);
         return nodesCount;
     }
+
     private void levelOrder(List<TreeNode> curLevel) {
         List<TreeNode> nextLevel = new ArrayList<TreeNode>();
         for (TreeNode node : curLevel) {
@@ -633,6 +655,7 @@ public class TreeSolution {
 
     /**
      * 226. 翻转二叉树
+     *
      * @param root
      * @return
      */
@@ -650,16 +673,19 @@ public class TreeSolution {
 
     /**
      * 230. 二叉搜索树中第K小的元素
+     *
      * @param root
      * @param k
      * @return
      */
     List<Integer> nodeList = new ArrayList<Integer>();
+
     public int kthSmallest(TreeNode root, int k) {
         //二叉搜索树中序遍历递增
         smallest(root);
-        return nodeList.get(k-1);
+        return nodeList.get(k - 1);
     }
+
     private void smallest(TreeNode root) {
         if (root == null) {
             return;
@@ -671,6 +697,7 @@ public class TreeSolution {
 
     /**
      * 235. 二叉搜索树的最近公共祖先
+     *
      * @param root
      * @param p
      * @param q
@@ -678,7 +705,7 @@ public class TreeSolution {
      */
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         //pq都在root左边，或者一左一右，或者都在右边
-        if(p.val < root.val && q.val < root.val) {
+        if (p.val < root.val && q.val < root.val) {
             return lowestCommonAncestor(root.left, p, q);
         }
         if (p.val > root.val && q.val > root.val) {
@@ -689,6 +716,7 @@ public class TreeSolution {
 
     /**
      * 236. 二叉树的最近公共祖先
+     *
      * @param root
      * @param p
      * @param q
@@ -697,23 +725,24 @@ public class TreeSolution {
     public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
         List<Integer> inorderList = new ArrayList<Integer>();
         inOrder(root, inorderList);
-        int pPos=0;
-        int qPos=0;
-        for (int i=0;i<inorderList.size();i++) {
-            if(inorderList.get(i) == p.val) {
+        int pPos = 0;
+        int qPos = 0;
+        for (int i = 0; i < inorderList.size(); i++) {
+            if (inorderList.get(i) == p.val) {
                 pPos = i;
                 continue;
             }
-            if(inorderList.get(i) == q.val) {
+            if (inorderList.get(i) == q.val) {
                 qPos = i;
             }
         }
-        if (pPos<qPos) {
+        if (pPos < qPos) {
             return commonAncestor(root, pPos, qPos, inorderList);
         } else {
             return commonAncestor(root, qPos, pPos, inorderList);
         }
     }
+
     private void inOrder(TreeNode root, List<Integer> inorderList) {
         if (root == null) {
             return;
@@ -722,23 +751,24 @@ public class TreeSolution {
         inorderList.add(root.val);
         inOrder(root.right, inorderList);
     }
+
     private TreeNode commonAncestor(TreeNode root, int start, int end, List<Integer> inorderList) {
         if (root == null) {
             return null;
         }
-        for (int i=start;i<=end;i++) {
+        for (int i = start; i <= end; i++) {
             if (root.val == inorderList.get(i)) {
                 return root;
             }
         }
         TreeNode leftCommon = commonAncestor(root.left, start, end, inorderList);
         TreeNode rightCommon = commonAncestor(root.right, start, end, inorderList);
-        return leftCommon != null?leftCommon:rightCommon;
+        return leftCommon != null ? leftCommon : rightCommon;
     }
 
     //二叉树的最近公共祖先
     public TreeNode lowestCommonAncestor3(TreeNode root, TreeNode p, TreeNode q) {
-        if(root == null || root == p || root == q){
+        if (root == null || root == p || root == q) {
             return root;
         }
         //查看左子树中是否有目标结点，没有为null
@@ -746,7 +776,7 @@ public class TreeSolution {
         //查看右子树是否有目标节点，没有为null
         TreeNode right = lowestCommonAncestor(root.right, p, q);
         //都不为空，说明做右子树都有目标结点，则公共祖先就是本身
-        if(left != null && right != null){
+        if (left != null && right != null) {
             return root;
         }
         //如果发现了目标节点，则继续向上标记为该目标节点
@@ -755,6 +785,7 @@ public class TreeSolution {
 
     /**
      * 257. 二叉树的所有路径
+     *
      * @param root
      * @return
      */
@@ -763,6 +794,7 @@ public class TreeSolution {
         constructPaths(root, "", paths);
         return paths;
     }
+
     private void constructPaths(TreeNode root, String path, List<String> paths) {
         if (root != null) {
             path += Integer.toString(root.val);
@@ -778,14 +810,17 @@ public class TreeSolution {
 
     /**
      * 404. 左叶子之和
+     *
      * @param root
      * @return
      */
     int leftSum = 0;
+
     public int sumOfLeftLeaves(TreeNode root) {
         sumLeftLeaves(root);
         return leftSum;
     }
+
     private void sumLeftLeaves(TreeNode root) {
         if (root != null) {
             if (root.left != null && (root.left.left == null && root.left.right == null)) {
@@ -798,7 +833,8 @@ public class TreeSolution {
 
 
     /**
-     *437. 路径总和 III
+     * 437. 路径总和 III
+     *
      * @param root
      * @param sum
      * @return
@@ -809,6 +845,7 @@ public class TreeSolution {
         }
         return dfsPath(root, sum) + pathSum3(root.left, sum) + pathSum3(root.right, sum);
     }
+
     private int dfsPath(TreeNode node, int sum) {
         if (node == null) {
             return 0;
@@ -822,6 +859,7 @@ public class TreeSolution {
 
     /**
      * 450. 删除二叉搜索树中的节点
+     *
      * @param root
      * @param key
      * @return
@@ -834,20 +872,21 @@ public class TreeSolution {
         if (root.val == key) {
             //左右子树为空，则直接拼接不为空的一边
             if (root.left == null || root.right == null) {
-                root = (root.left != null)?root.left : root.right;
+                root = (root.left != null) ? root.left : root.right;
             } else {
                 //左右子树都不为空
                 root.val = findMinNode(root.right).val;
                 //删除该节点
                 root.right = deleteNode(root.right, root.val);
             }
-        } else if(key < root.val) {
+        } else if (key < root.val) {
             root.left = deleteNode(root.left, key);
         } else {
             root.right = deleteNode(root.right, key);
         }
         return root;
     }
+
     private TreeNode findMinNode(TreeNode root) {
         if (root == null) {
             return null;
@@ -860,6 +899,7 @@ public class TreeSolution {
 
     /**
      * 501. 二叉搜索树中的众数
+     *
      * @param root
      * @return
      */
@@ -867,17 +907,19 @@ public class TreeSolution {
     int maxVal = 0;
     int max = 0;
     int cur = 0;
+
     public int[] findMode(TreeNode root) {
         if (root == null) {
-            return new int[] {};
+            return new int[]{};
         }
         modeInorder(root);
         int[] res = new int[modeList.size()];
-        for(int i=0;i<modeList.size();i++) {
-            res[i]=modeList.get(i);
+        for (int i = 0; i < modeList.size(); i++) {
+            res[i] = modeList.get(i);
         }
         return res;
     }
+
     //中序
     private void modeInorder(TreeNode root) {
         if (root == null) {
@@ -903,23 +945,26 @@ public class TreeSolution {
 
     /**
      * 508. 出现次数最多的子树元素和
+     *
      * @param root
      * @return
      */
     Map<Integer, Integer> sumList = new HashMap<Integer, Integer>();
     int maxCount = 1;
+
     public int[] findFrequentTreeSum(TreeNode root) {
         if (root == null) {
-            return new int[] {};
+            return new int[]{};
         }
         frequentTreeSum(root);
         List<Integer> sumList2 = getKey(sumList, maxCount);
         int[] res = new int[sumList2.size()];
-        for(int i=0;i<sumList2.size();i++) {
-            res[i]=sumList2.get(i);
+        for (int i = 0; i < sumList2.size(); i++) {
+            res[i] = sumList2.get(i);
         }
         return res;
     }
+
     private int frequentTreeSum(TreeNode node) {
         if (node == null) {
             return 0;
@@ -928,21 +973,22 @@ public class TreeSolution {
         total += frequentTreeSum(node.left);
         total += frequentTreeSum(node.right);
         if (sumList.containsKey(total)) {
-            int count = sumList.get(total)+1;
+            int count = sumList.get(total) + 1;
             if (count > maxCount) {
                 maxCount = count;
             }
-            sumList.put(total, sumList.get(total)+1);
+            sumList.put(total, sumList.get(total) + 1);
         } else {
             sumList.put(total, 1);
         }
         return total;
     }
+
     //map根据value找key
-    private List<Integer> getKey(Map<Integer, Integer> map, Integer value){
+    private List<Integer> getKey(Map<Integer, Integer> map, Integer value) {
         List<Integer> keyList = new ArrayList<Integer>();
-        for(Integer key: map.keySet()){
-            if(map.get(key).equals(value)){
+        for (Integer key : map.keySet()) {
+            if (map.get(key).equals(value)) {
                 keyList.add(key);
             }
         }
@@ -951,10 +997,12 @@ public class TreeSolution {
 
     /**
      * 513. 找树左下角的值
+     *
      * @param root
      * @return
      */
     int bottomLeftVal = 0;
+
     public int findBottomLeftValue(TreeNode root) {
         //层序遍历
         List<TreeNode> firstLevel = new ArrayList<TreeNode>();
@@ -962,6 +1010,7 @@ public class TreeSolution {
         getLevelOrder(firstLevel);
         return bottomLeftVal;
     }
+
     private void getLevelOrder(List<TreeNode> curLevel) {
         List<TreeNode> nextLevel = new ArrayList<TreeNode>();
         for (TreeNode thisLevelNode : curLevel) {
@@ -981,10 +1030,12 @@ public class TreeSolution {
 
     /**
      * 515. 在每个树行中找最大值
+     *
      * @param root
      * @return
      */
     List<Integer> largeLevelVal = new ArrayList<Integer>();
+
     public List<Integer> largestValues(TreeNode root) {
         //层序
         if (root == null) {
@@ -995,6 +1046,7 @@ public class TreeSolution {
         getLevelOrder2(firstLevel);
         return largeLevelVal;
     }
+
     private void getLevelOrder2(List<TreeNode> curLevel) {
         List<TreeNode> nextLevel = new ArrayList<TreeNode>();
         int maxLargeVal = curLevel.get(0).val;
@@ -1018,16 +1070,18 @@ public class TreeSolution {
     /**
      * 530. 二叉搜索树的最小绝对差
      * 给定一个所有节点为非负值的二叉搜索树，求树中任意两节点的差的绝对值的最小值。
+     *
      * @param root
      * @return
      */
     int minDiff = Integer.MAX_VALUE;
+
     public int getMinimumDifference(TreeNode root) {
         //中序遍历为递增
         inorder(root);
-        for (int i=0;i<res.size()-1;i++) {
-            if (res.get(i+1)-res.get(i) < minDiff) {
-                minDiff = res.get(i+1)-res.get(i);
+        for (int i = 0; i < res.size() - 1; i++) {
+            if (res.get(i + 1) - res.get(i) < minDiff) {
+                minDiff = res.get(i + 1) - res.get(i);
             }
         }
         return minDiff;
@@ -1036,6 +1090,7 @@ public class TreeSolution {
     /**
      * 538. 把二叉搜索树转换为累加树
      * 给定一个二叉搜索树（Binary Search Tree），把它转换成为累加树（Greater Tree)，使得每个节点的值是原来的节点值加上所有大于它的节点值之和。
+     *
      * @param root
      * @return
      */
@@ -1044,6 +1099,7 @@ public class TreeSolution {
         rightToLeft(root, 0);
         return root;
     }
+
     private int rightToLeft(TreeNode root, int sum) {
         if (root == null) {
             return sum;
@@ -1055,21 +1111,24 @@ public class TreeSolution {
     /**
      * 543. 二叉树的直径
      * 一棵二叉树的直径长度是任意两个结点路径长度中的最大值。这条路径可能穿过根结点。
+     *
      * @param root
      * @return
      */
     int diameter = 0;
+
     public int diameterOfBinaryTree(TreeNode root) {
         computePath(root);
         return diameter;
     }
+
     private int computePath(TreeNode root) {
         if (root == null) {
             return 0;
         }
-        int leftPath =  computePath(root.left);
+        int leftPath = computePath(root.left);
         int rightPath = computePath(root.right);
-        if (leftPath + rightPath  > diameter) {
+        if (leftPath + rightPath > diameter) {
             diameter = leftPath + rightPath;
         }
         return leftPath > rightPath ? leftPath + 1 : rightPath + 1;
@@ -1079,26 +1138,30 @@ public class TreeSolution {
      * 563. 二叉树的坡度
      * 一个树的节点的坡度定义即为，该节点左子树的结点之和和右子树结点之和的差的绝对值。空结点的的坡度是0。
      * 整个树的坡度就是其所有节点的坡度之和。
+     *
      * @param root
      * @return
      */
     int tiltAll = 0;
+
     public int findTilt(TreeNode root) {
         leftRightSum(root);
         return tiltAll;
     }
+
     private int leftRightSum(TreeNode root) {
         if (root == null) {
             return 0;
         }
         int leftSum = leftRightSum(root.left);
         int rightSum = leftRightSum(root.right);
-        tiltAll += Math.abs(leftSum-rightSum);
+        tiltAll += Math.abs(leftSum - rightSum);
         return leftSum + rightSum + root.val;
     }
 
     /**
      * 572. 另一个树的子树
+     *
      * @param s
      * @param t
      * @return
@@ -1115,6 +1178,7 @@ public class TreeSolution {
 
     /**
      * 617. 合并二叉树
+     *
      * @param t1
      * @param t2
      * @return
@@ -1135,6 +1199,7 @@ public class TreeSolution {
 
     /**
      * 623. 在二叉树中增加一行
+     *
      * @param root
      * @param v
      * @param d
@@ -1160,7 +1225,7 @@ public class TreeSolution {
                 nextList.add(preL.right);
             }
         }
-        while (curD < d-1) {
+        while (curD < d - 1) {
             preList = nextList;
             nextList = new ArrayList<TreeNode>();
             for (TreeNode preL : preList) {
@@ -1171,8 +1236,8 @@ public class TreeSolution {
             }
             curD++;
         }
-        int j=0;
-        for (int i=0;i < preList.size(); i++) {
+        int j = 0;
+        for (int i = 0; i < preList.size(); i++) {
             if (preList.get(i) != null) {
                 TreeNode addNode1 = new TreeNode(v);
                 TreeNode addNode2 = new TreeNode(v);
@@ -1191,6 +1256,7 @@ public class TreeSolution {
     /**
      * 637. 二叉树的层平均值
      * 给定一个非空二叉树, 返回一个由每层节点平均值组成的数组.
+     *
      * @param root
      * @return
      */
@@ -1214,7 +1280,7 @@ public class TreeSolution {
                     nextLevel.add(node.right);
                 }
             }
-            res.add(levelSum/curLevel.size());
+            res.add(levelSum / curLevel.size());
             curLevel = nextLevel;
         }
         return res;
@@ -1222,11 +1288,13 @@ public class TreeSolution {
 
     /**
      * 652. 寻找重复的子树
+     *
      * @param root
      * @return
      */
     List<TreeNode> dplcList = new ArrayList<TreeNode>();
     Map<String, Integer> sTreeStrs = new HashMap();
+
     public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
         if (root == null) {
             return dplcList;
@@ -1235,14 +1303,15 @@ public class TreeSolution {
         buildSubTreeStr(root);
         return dplcList;
     }
+
     private String buildSubTreeStr(TreeNode node) {
         if (node == null) {
             return "#";
         }
         String val = node.val + buildSubTreeStr(node.left) + buildSubTreeStr(node.right);
-        if(sTreeStrs.get(val)==null){
+        if (sTreeStrs.get(val) == null) {
             sTreeStrs.put(val, 1);
-        }else if(sTreeStrs.get(val)==1){
+        } else if (sTreeStrs.get(val) == 1) {
             dplcList.add(node);
             sTreeStrs.put(val, 2);
         }
@@ -1251,43 +1320,47 @@ public class TreeSolution {
 
     /**
      * 653. 两数之和 IV - 输入 BST
+     *
      * @param root
      * @param k
      * @return
      */
     public boolean findTarget(TreeNode root, int k) {
         //中序遍历，递增序列，双指针找
-       return false;
+        return false;
     }
 
     /**
      * 654. 最大二叉树
+     *
      * @param nums
      * @return
      */
     public TreeNode constructMaximumBinaryTree(int[] nums) {
-        return maximumBinaryTree(nums, 0, nums.length-1);
+        return maximumBinaryTree(nums, 0, nums.length - 1);
     }
+
     private TreeNode maximumBinaryTree(int[] nums, int start, int end) {
         if (start > end) {
             return null;
         }
-        int maxVal=nums[start];
+        int maxVal = nums[start];
         int pos = start;
-        for (int i=start;i<=end;i++) {
+        for (int i = start; i <= end; i++) {
             if (nums[i] > maxVal) {
                 maxVal = nums[i];
                 pos = i;
             }
         }
         TreeNode node = new TreeNode(maxVal);
-        node.left = maximumBinaryTree(nums, start, pos-1);
-        node.right = maximumBinaryTree(nums, pos+1, end);
+        node.left = maximumBinaryTree(nums, start, pos - 1);
+        node.right = maximumBinaryTree(nums, pos + 1, end);
         return node;
     }
 
     /**
      * 655. 输出二叉树
+     *
      * @param root
      * @return
      */
@@ -1298,10 +1371,12 @@ public class TreeSolution {
 
     /**
      * 662. 二叉树最大宽度
+     *
      * @param root
      * @return
      */
     int maxWidth = 0;
+
     public int widthOfBinaryTree(TreeNode root) {
         //层序遍历，求每一层的宽度
         List<TreeNode> curLevel = new ArrayList<TreeNode>();
@@ -1315,8 +1390,8 @@ public class TreeSolution {
             } else {
                 //
                 int i = 0;
-                int j = curLevel.size()-1;
-                while (i<j) {
+                int j = curLevel.size() - 1;
+                while (i < j) {
                     if (curLevel.get(i) != null && curLevel.get(j) != null) {
                         break;
                     }
@@ -1327,7 +1402,7 @@ public class TreeSolution {
                         j--;
                     }
                 }
-                width = j-i+1;
+                width = j - i + 1;
             }
             if (width > maxWidth) {
                 maxWidth = width;
@@ -1346,6 +1421,7 @@ public class TreeSolution {
         }
         return maxWidth;
     }
+
     private boolean isAllNull(List<TreeNode> nodes) {
         boolean isNull = true;
         for (TreeNode node : nodes) {
@@ -1359,6 +1435,7 @@ public class TreeSolution {
 
     /**
      * 669. 修剪二叉搜索树
+     *
      * @param root
      * @param L
      * @param R
@@ -1380,6 +1457,7 @@ public class TreeSolution {
 
     /**
      * 671. 二叉树中第二小的节点
+     *
      * @param root
      * @return
      */
@@ -1391,14 +1469,17 @@ public class TreeSolution {
     /**
      * 687. 最长同值路径
      * 给定一个二叉树，找到最长的路径，这个路径中的每个节点具有相同值。 这条路径可以经过也可以不经过根节点。
+     *
      * @param root
      * @return
      */
     int longestPath = 0;
+
     public int longestUnivaluePath(TreeNode root) {
         univaluePath(root);
         return longestPath;
     }
+
     //子树中最长的路径
     private int univaluePath(TreeNode root) {
         if (root == null) {
@@ -1419,11 +1500,12 @@ public class TreeSolution {
         if (path > longestPath) {
             longestPath = path;
         }
-        return leftAll>rightAll?leftAll:rightAll;
+        return leftAll > rightAll ? leftAll : rightAll;
     }
 
     /**
      * 700. 二叉搜索树中的搜索
+     *
      * @param root
      * @param val
      * @return
@@ -1444,6 +1526,7 @@ public class TreeSolution {
 
     /**
      * 701. 二叉搜索树中的插入操作
+     *
      * @param root
      * @param val
      * @return
@@ -1462,6 +1545,7 @@ public class TreeSolution {
 
     /**
      * 783. 二叉搜索树结点最小距离
+     *
      * @param root
      * @return
      */
@@ -1473,8 +1557,9 @@ public class TreeSolution {
     /**
      * 814. 二叉树剪枝
      * 给定二叉树根结点 root ，此外树的每个结点的值要么是 0，要么是 1。
-     *
+     * <p>
      * 返回移除了所有不包含 1 的子树的原二叉树。
+     *
      * @param root
      * @return
      */
@@ -1494,6 +1579,7 @@ public class TreeSolution {
     /**
      * 863. 二叉树中所有距离为 K 的结点
      * 返回到目标结点 target 距离为 K 的所有结点的值的列表。
+     *
      * @param root
      * @param target
      * @param K
@@ -1508,6 +1594,7 @@ public class TreeSolution {
     /**
      * 865. 具有所有最深结点的最小子树
      * 返回能满足“以该结点为根的子树中包含所有最深的结点”这一条件的具有最大深度的结点。
+     *
      * @param root
      * @return
      */
@@ -1527,6 +1614,7 @@ public class TreeSolution {
             return subtreeWithAllDeepest(root.right);
         }
     }
+
     //求深度的最优写法
     private int maxDepthOptimize(TreeNode root) {
         if (root == null) {
@@ -1537,6 +1625,7 @@ public class TreeSolution {
 
     /**
      * 872. 叶子相似的树
+     *
      * @param root1
      * @param root2
      * @return
@@ -1550,13 +1639,14 @@ public class TreeSolution {
         if (leaf1.size() != leaf2.size()) {
             return false;
         }
-        for (int i=0;i<leaf1.size();i++) {
+        for (int i = 0; i < leaf1.size(); i++) {
             if (leaf1.get(i) != leaf2.get(i)) {
                 return false;
             }
         }
         return true;
     }
+
     private void leafNode(TreeNode root, List<Integer> leafs) {
         if (root == null) {
             return;
@@ -1571,6 +1661,7 @@ public class TreeSolution {
     /**
      * 938. 二叉搜索树的范围和
      * 给定二叉搜索树的根结点 root，返回 L 和 R（含）之间的所有结点的值的和。
+     *
      * @param root
      * @param L
      * @param R
@@ -1591,6 +1682,7 @@ public class TreeSolution {
 
     /**
      * 951. 翻转等价二叉树
+     *
      * @param root1
      * @param root2
      * @return
@@ -1608,6 +1700,7 @@ public class TreeSolution {
     /**
      * 二叉树的左视图
      * 层序遍历，放的第一个就是
+     *
      * @return
      */
     public List<Integer> LeftSideView(TreeNode root) {

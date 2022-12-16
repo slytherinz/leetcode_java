@@ -6,6 +6,7 @@ public class ListSolution {
     /**
      * 160. 相交链表
      * 找到两个单链表相交的起始节点。
+     *
      * @param headA
      * @param headB
      * @return
@@ -56,6 +57,7 @@ public class ListSolution {
     /**
      * 203. 移除链表元素
      * 删除链表中等于给定值 val 的所有节点。
+     *
      * @param head
      * @param val
      * @return
@@ -85,6 +87,7 @@ public class ListSolution {
 
     /**
      * 206. 反转链表
+     *
      * @param head
      * @return
      */
@@ -106,6 +109,7 @@ public class ListSolution {
     /**
      * 234. 回文链表
      * 请判断一个链表是否为回文链表。
+     *
      * @param head
      * @return
      */
@@ -148,6 +152,7 @@ public class ListSolution {
     /**
      * 328. 奇偶链表
      * 给定一个单链表，把所有的奇数节点和偶数节点分别排在一起。请注意，这里的奇数节点和偶数节点指的是节点编号的奇偶性，而不是节点的值的奇偶性。
+     *
      * @param head
      * @return
      */
@@ -172,6 +177,7 @@ public class ListSolution {
      * 445. 两数相加 II
      * 给定两个非空链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储单个数字。将这两数相加会返回一个新的链表。
      * 不能对列表中的节点进行翻转。
+     *
      * @param l1
      * @param l2
      * @return
@@ -193,24 +199,24 @@ public class ListSolution {
         while (!l1Num.empty() && !l2Num.empty()) {
             int num1 = l1Num.pop();
             int num2 = l2Num.pop();
-            int sum = (num1 + num2 + carry)%10;
-            carry = (num1 + num2 + carry)/10;
+            int sum = (num1 + num2 + carry) % 10;
+            carry = (num1 + num2 + carry) / 10;
             ListNode addNode = new ListNode(sum);
             addNode.next = head;
             head = addNode;
         }
         while (!l1Num.empty()) {
             int num = l1Num.pop();
-            int sum = (num + carry)%10;
-            carry = (num + carry)/10;
+            int sum = (num + carry) % 10;
+            carry = (num + carry) / 10;
             ListNode addNode = new ListNode(sum);
             addNode.next = head;
             head = addNode;
         }
-        while(!l2Num.empty()) {
+        while (!l2Num.empty()) {
             int num = l2Num.pop();
-            int sum = (num + carry)%10;
-            carry = (num + carry)/10;
+            int sum = (num + carry) % 10;
+            carry = (num + carry) / 10;
             ListNode addNode = new ListNode(sum);
             addNode.next = head;
             head = addNode;
@@ -226,10 +232,11 @@ public class ListSolution {
     /**
      * 725. 分隔链表
      * 给定一个头结点为 root 的链表, 编写一个函数以将链表分隔为 k 个连续的部分。
-     *
+     * <p>
      * 每部分的长度应该尽可能的相等: 任意两部分的长度差距不能超过 1，也就是说可能有些部分为 null。
-     *
+     * <p>
      * 这k个部分应该按照在链表中出现的顺序进行输出，并且排在前面的部分的长度应该大于或等于后面的长度。
+     *
      * @param root
      * @param k
      * @return
@@ -283,9 +290,9 @@ public class ListSolution {
     /**
      * 817. 链表组件
      * 给定一个链表（链表结点包含一个整型值）的头结点 head。
-     *
+     * <p>
      * 同时给定列表 G，该列表是上述链表中整型值的一个子集。
-     *
+     * <p>
      * 返回列表 G 中组件的个数，这里对组件的定义为：链表中一段最长连续结点的值（该值必须在列表 G 中）构成的集合。
      *
      * @param head
@@ -314,8 +321,9 @@ public class ListSolution {
     /**
      * 1019. 链表中的下一个更大节点
      * 给定一个带有头结点 head 的非空单链表，返回链表的中间结点。
-     *
+     * <p>
      * 如果有两个中间结点，则返回第二个中间结点。
+     *
      * @param head
      * @return
      */
@@ -331,13 +339,13 @@ public class ListSolution {
         //栈里压的元素第一位是节点值，第二位是节点位置
         Stack<Pair> tmp = new Stack<Pair>();
         while (head != null) {
-           resList.add(0);
-           while (!tmp.empty() && head.val > tmp.peek().first) {
-               resList.set(tmp.peek().second, head.val);
-               tmp.pop();
-           }
-           tmp.push(new Pair(head.val, pos++));
-           head = head.next;
+            resList.add(0);
+            while (!tmp.empty() && head.val > tmp.peek().first) {
+                resList.set(tmp.peek().second, head.val);
+                tmp.pop();
+            }
+            tmp.push(new Pair(head.val, pos++));
+            head = head.next;
         }
         int[] res = new int[resList.size()];
         for (int i = 0; i < resList.size(); i++) {
@@ -345,9 +353,11 @@ public class ListSolution {
         }
         return res;
     }
+
     class Pair {
         int first;
         int second;
+
         Pair(int first, int second) {
             this.first = first;
             this.second = second;

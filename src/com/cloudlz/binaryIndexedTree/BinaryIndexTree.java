@@ -12,7 +12,7 @@ public class BinaryIndexTree {
 
     // 单点更新
     public void update(int pos, int val) {
-        while(pos <= c.length) {
+        while (pos <= c.length) {
             c[pos] += val;
             pos += lowbit(pos);
         }

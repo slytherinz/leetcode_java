@@ -466,7 +466,6 @@ public class DynamicSolution {
     }
 
     /**
-     *
      * @param books
      * @param shelf_width
      * @return
@@ -474,19 +473,19 @@ public class DynamicSolution {
     public int minHeightShelves(int[][] books, int shelf_width) {
         int n = books.length;
         //dp[i]表示放完前i本书的最小高度
-        int[] dp = new int[n+1];
+        int[] dp = new int[n + 1];
         Arrays.fill(dp, Integer.MAX_VALUE);
         dp[0] = 0;
-        for (int i=1; i<=n; i++) {
+        for (int i = 1; i <= n; i++) {
             int hight = 0;
             int width = 0;
-            for (int j=i; j>0; j--) {
+            for (int j = i; j > 0; j--) {
                 width += books[j - 1][0];
                 if (width > shelf_width) {
                     break;
                 }
-                hight = Math.max(hight, books[j-1][1]);
-                dp[i] = Math.min(dp[i], dp[j-1]+hight);
+                hight = Math.max(hight, books[j - 1][1]);
+                dp[i] = Math.min(dp[i], dp[j - 1] + hight);
             }
         }
         return dp[n];
@@ -494,6 +493,7 @@ public class DynamicSolution {
 
     /**
      * 1626. 无矛盾的最佳球队
+     *
      * @param scores
      * @param ages
      * @return
@@ -502,7 +502,7 @@ public class DynamicSolution {
         // 先升序排序，问题转化为最大上升子序列和
         int len = scores.length;
         int[][] sortAsc = new int[len][2];
-        for (int i=0;i<len;i++) {
+        for (int i = 0; i < len; i++) {
             sortAsc[i][0] = ages[i];
             sortAsc[i][1] = scores[i];
         }
@@ -510,20 +510,20 @@ public class DynamicSolution {
             @Override
             public int compare(int[] o1, int[] o2) {
                 if (o1[0] == o2[0]) {
-                    return o1[1]-o2[1];
+                    return o1[1] - o2[1];
                 } else {
-                    return o1[0]-o2[0];
+                    return o1[0] - o2[0];
                 }
             }
         });
         // dp[i]表示以第i个元素结尾的最大上升子序列和
         int[] dp = new int[len];
         int res = sortAsc[0][1];
-        for (int i=0;i<len;i++) {
+        for (int i = 0; i < len; i++) {
             dp[i] = sortAsc[i][1];
         }
-        for (int i=1;i<len;i++) {
-            for(int j=0;j<i;j++) {
+        for (int i = 1; i < len; i++) {
+            for (int j = 0; j < i; j++) {
                 if (sortAsc[j][1] <= sortAsc[i][1]) {
                     dp[i] = Math.max(dp[j] + sortAsc[i][1], dp[i]);
                 }

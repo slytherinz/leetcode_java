@@ -7,6 +7,7 @@ public class BinarySearchSolution {
     /**
      * 4. 寻找两个有序数组的中位数
      * 请你找出这两个有序数组的中位数，并且要求算法的时间复杂度为 O(log(m + n))。
+     *
      * @param nums1
      * @param nums2
      * @return
@@ -17,6 +18,7 @@ public class BinarySearchSolution {
 
     /**
      * 33. 搜索旋转排序数组
+     *
      * @param nums
      * @param target
      * @return
@@ -28,7 +30,8 @@ public class BinarySearchSolution {
     }
 
     /**
-     *34. 在排序数组中查找元素的第一个和最后一个位置
+     * 34. 在排序数组中查找元素的第一个和最后一个位置
+     *
      * @param nums
      * @param target
      * @return
@@ -40,15 +43,16 @@ public class BinarySearchSolution {
 
     /**
      * 81. 搜索旋转排序数组 II(可能包含重复元素)
+     *
      * @param nums
      * @param target
      * @return
      */
     public boolean search2(int[] nums, int target) {
         int left = 0;
-        int right = nums.length-1;
+        int right = nums.length - 1;
         while (left <= right) {
-            int pivot = left + ((right-left)>>1);
+            int pivot = left + ((right - left) >> 1);
             if (nums[pivot] == target) {
                 return true;
             }
@@ -68,6 +72,7 @@ public class BinarySearchSolution {
 
     /**
      * 153. 寻找旋转排序数组中的最小值
+     *
      * @param nums
      * @return
      */
@@ -76,14 +81,14 @@ public class BinarySearchSolution {
             return nums[0];
         }
         int left = 0;
-        int right = nums.length-1;
+        int right = nums.length - 1;
         if (nums[right] > nums[left]) {
             return nums[0];
         }
         while (left <= right) {
             int pivot = left + ((right - left) >> 1);
-            if (nums[pivot] > nums[pivot+1]) {
-                return nums[pivot+1];
+            if (nums[pivot] > nums[pivot + 1]) {
+                return nums[pivot + 1];
             } else {
                 if (nums[pivot] < nums[left]) {
                     right = pivot - 1;
@@ -97,12 +102,14 @@ public class BinarySearchSolution {
 
     /**
      * 162. 寻找峰值
+     *
      * @param nums
      * @return
      */
     public int findPeakElement(int[] nums) {
         return search(nums, 0, nums.length - 1);
     }
+
     public int search(int[] nums, int l, int r) {
         if (l == r)
             return l;

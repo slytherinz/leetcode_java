@@ -1,6 +1,7 @@
 package com.cloudlz.coding_interviews;
 
 import com.cloudlz.array.ArraySolution;
+import com.cloudlz.hot.LeetCodeHotOneHundred;
 import com.cloudlz.list.ListNode;
 import com.cloudlz.stringtype.StringSolution;
 import com.cloudlz.tree.TreeNode;
@@ -861,9 +862,14 @@ public class CI {
 
     public static void main(String[] args) {
 
-        String abc = "aababcabc";
-        StringSolution ss = new StringSolution();
-        ss.countGoodSubstrings(abc);
+        String abc = "bbbba";
+        String pa = ".*a*a";
+//        StringSolution ss = new StringSolution();
+//        boolean res = ss.match(abc.toCharArray(), pa.toCharArray());
+        LeetCodeHotOneHundred l = new LeetCodeHotOneHundred();
+        int[] input = {2, 7, 11, 15};
+        l.twoSum(input, 9);
+
     }
 
 }

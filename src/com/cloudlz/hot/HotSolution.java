@@ -228,6 +228,7 @@ public class HotSolution {
 
     /**
      * 315. 计算右侧小于当前元素的个数
+     *
      * @param nums
      * @return
      */
@@ -238,6 +239,7 @@ public class HotSolution {
     /**
      * 395. 至少有K个重复字符的最长子串
      * 找到给定字符串（由小写字符组成）中的最长子串 T ， 要求 T 中的每一字符出现次数都不少于 k 。输出 T 的长度
+     *
      * @param s
      * @param k
      * @return
@@ -247,20 +249,21 @@ public class HotSolution {
         if (s == null || s.length() < k) {
             return 0;
         }
-        return countLongSubStr(s, 0, s.length()-1, k);
+        return countLongSubStr(s, 0, s.length() - 1, k);
     }
-    private int countLongSubStr(String s, int start ,int end, int k) {
+
+    private int countLongSubStr(String s, int start, int end, int k) {
         if (end - start + 1 < k) {
             return 0;
         }
         int[] charTimes = new int[26];//26个字母
-        for (int i=start;i<=end;i++) {
-            charTimes[s.charAt(i)-'a']++;
+        for (int i = start; i <= end; i++) {
+            charTimes[s.charAt(i) - 'a']++;
         }
-        while (end-start+1>=k && charTimes[s.charAt(start)-'a']<k) {
+        while (end - start + 1 >= k && charTimes[s.charAt(start) - 'a'] < k) {
             start++;
         }
-        while (end-start+1>=k && charTimes[s.charAt(end)-'a']<k) {
+        while (end - start + 1 >= k && charTimes[s.charAt(end) - 'a'] < k) {
             end--;
         }
         if (end - start + 1 < k) return 0;
@@ -268,7 +271,7 @@ public class HotSolution {
         for (int i = start; i <= end; ++i) {
             //  如果第i个不符合要求，切分成左右两段分别递归求得
             if (charTimes[s.charAt(i) - 'a'] < k) {
-                return Math.max(countLongSubStr(s,start, i - 1, k), countLongSubStr(s, i + 1, end, k));
+                return Math.max(countLongSubStr(s, start, i - 1, k), countLongSubStr(s, i + 1, end, k));
             }
         }
         return end - start + 1;
