@@ -861,15 +861,7 @@ public class CI {
     }
 
     public static void main(String[] args) {
-
-        String abc = "bbbba";
-        String pa = ".*a*a";
-//        StringSolution ss = new StringSolution();
-//        boolean res = ss.match(abc.toCharArray(), pa.toCharArray());
-        LeetCodeHotOneHundred l = new LeetCodeHotOneHundred();
-        int[] input = {2, 7, 11, 15};
-        l.twoSum(input, 9);
-
+        System.out.println("ok");
     }
 
 }
